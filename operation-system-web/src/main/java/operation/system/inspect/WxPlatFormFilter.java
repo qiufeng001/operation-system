@@ -5,9 +5,9 @@ import com.framework.core.redis.WxJedisCommands;
 import com.framework.core.redis.WxRedisClient;
 import com.framework.core.util.CookieUtils;
 import com.framework.web.inspect.ExecutionContext;
-import operation.system.utils.DomainUtils;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.stereotype.Component;
+import wx.milk.web.utils.DomainUtils;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
@@ -33,7 +33,7 @@ public class WxPlatFormFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest req, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        HashMap<String, String> contextMap = new HashMap<>();
+        HashMap<String, String> contextMap = new HashMap<String, String>();
 
         HttpServletRequest request = (HttpServletRequest) req;
         request.setAttribute(Config.COOKIE_DOMAIN, getCookieDomain(request.getServerName()));
@@ -43,9 +43,10 @@ public class WxPlatFormFilter implements Filter {
 
         if (requestURI.contains("/signout")) {
             ExecutionContext.setContextMap(null);
-        }else{
+        } else {
             long startTime = System.currentTimeMillis();
             String currentThreadId = Thread.currentThread().getId() + "_" + CookieUtils.getLoginToken(request);
+
             contextMap.put(Config.LOGIN_START_TIME, startTime + "");
             contextMap.put(Config.WX_SESSION_ID, "wx_session_id_" + CookieUtils.getValue(request));
             contextMap.put(Config.USER_IP, request.getRemoteAddr());

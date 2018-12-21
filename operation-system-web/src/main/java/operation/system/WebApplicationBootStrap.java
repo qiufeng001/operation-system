@@ -11,7 +11,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement // 事物注解
 @ImportResource(locations={"classpath:spring-redis.xml"})
 @ComponentScan(basePackages = {
-								"operation.system.controller"
+								"operation.system.controller",
+								"operation.system.inspect",
 							   })
 public class WebApplicationBootStrap extends ApplicationBootStrap {
 	public static void main(String[] args) {

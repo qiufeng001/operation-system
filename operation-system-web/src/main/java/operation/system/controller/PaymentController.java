@@ -7,6 +7,7 @@ import operation.system.model.Payment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequestMapping(value = "/payment/*")
@@ -23,5 +24,11 @@ public class PaymentController extends BaseController<Payment, String> {
     @Override
     protected String getTemplateFolder() {
         return "/payment/";
+    }
+
+    @RequestMapping("/test_op")
+    @ResponseBody
+    public String test() {
+        return "test_op";
     }
 }
