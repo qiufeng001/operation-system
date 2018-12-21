@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: framework:com-framework-core:1.0-SNP">
+    <CLASSES>
+      <root url="jar://D:/.m2/springboot/repository/framework/com-framework-core/1.0-SNP/com-framework-core-1.0-SNP.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://D:/.m2/springboot/repository/framework/com-framework-core/1.0-SNP/com-framework-core-1.0-SNP-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://D:/.m2/springboot/repository/framework/com-framework-core/1.0-SNP/com-framework-core-1.0-SNP-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

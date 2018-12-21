@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="operation-system-domain" />
+        <module name="operation-system-manager" />
+        <module name="operation-system-model" />
+        <module name="operation-system-service" />
+        <module name="operation-system-web" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="operation-system" target="1.8" />
+      <module name="operation-system-domain" target="1.8" />
+      <module name="operation-system-manager" target="1.8" />
+      <module name="operation-system-model" target="1.8" />
+      <module name="operation-system-service" target="1.8" />
+      <module name="operation-system-web" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>
