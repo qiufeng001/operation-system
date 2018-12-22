@@ -87,27 +87,28 @@ public class MarketNettyServer {
     public void start() {
         // 从配置文件中(application.yml)获取服务端监听端口号
         // int port = nettyConfig.getPort();
-        serverBootstrap.group(boss, work)
-                .channel(NioServerSocketChannel.class)
-                .option(ChannelOption.SO_BACKLOG, 100)
-                .handler(new LoggingHandler(LogLevel.INFO));
         try {
             //设置事件处理
-            serverBootstrap.childHandler(new ChannelInitializer<SocketChannel>() {
-                @Override
-                protected void initChannel(SocketChannel ch) {
-                    ChannelPipeline pipeline = ch.pipeline();
-                    // 添加心跳支持
-                    pipeline.addLast(new IdleStateHandler(5, 0, 0, TimeUnit.SECONDS));
-                    // 基于定长的方式解决粘包/拆包问题
-                    pipeline.addLast(new LengthFieldBasedFrameDecoder(maxFrameLength, 0, 2, 0, 2));
-                    pipeline.addLast(new LengthFieldPrepender(2));
-                    // 序列化
-                    pipeline.addLast(new ObjectCodec());
-                    pipeline.addLast(new MarketNettyServerHandler());
-                }
-            });
-            LOGGER.info("netty服务器在[{}]端口启动监听", port);
+            serverBootstrap.group(boss, work)
+                    .channel(NioServerSocketChannel.class)
+                    .option(ChannelOption.SO_BACKLOG, 100)
+                    .handler(new LoggingHandler(LogLevel.INFO))
+                    .childHandler(new ChannelInitializer<SocketChannel>() {
+                        @Override
+                        protected void initChannel(SocketChannel ch) {
+                            ChannelPipeline pipeline = ch.pipeline();
+                            // 添加心跳支持
+                            pipeline.addLast(new IdleStateHandler(5, 0, 0, TimeUnit.SECONDS));
+                            // 基于定长的方式解决粘包/拆包问题
+                            pipeline.addLast(new LengthFieldBasedFrameDecoder(maxFrameLength, 0, 2, 0, 2));
+                            pipeline.addLast(new LengthFieldPrepender(2));
+                            // 序列化
+                            pipeline.addLast(new ObjectCodec());
+                            pipeline.addLast(new MarketNettyServerHandler());
+                        }
+                    });
+            System.out.println("netty服务器在" + port + "端口启动监听");
+            // LOGGER.info("netty服务器在[{}]端口启动监听", port);
             ChannelFuture f = serverBootstrap.bind(port).sync();
             f.channel().closeFuture().sync();
         } catch (InterruptedException e) {
