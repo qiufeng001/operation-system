@@ -1,28 +1,42 @@
 package operation.system.inspect;
 
 import operation.system.netty.MarketNettyServer;
-import org.springframework.context.ApplicationListener;
-import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.annotation.Resource;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
+import javax.servlet.annotation.WebListener;
 
-public class ApplicationStartupListener implements ApplicationListener<ContextRefreshedEvent> {
-    @Resource
+@WebListener
+public class ApplicationStartupListener implements ServletContextListener {
+
+    /**
+     * 注入NettyServer
+     */
+    @Autowired
     private MarketNettyServer server;
 
     @Override
-    public void onApplicationEvent(ContextRefreshedEvent event) {
+    public void contextInitialized(ServletContextEvent sce) {
+        Thread thread = new Thread(new NettyServerThread());
+        // 启动netty服务
+        thread.start();
+    }
 
-       /* //在容器加载完毕后启动线程
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                server.start();
-            }
-        });
+    @Override
+    public void contextDestroyed(ServletContextEvent sce) {
 
-        thread.start();*/
+    }
 
-        server.start();
+    /**
+     * netty服务启动线程 . <br>
+     *
+     * @author hkb
+     */
+    private class NettyServerThread implements Runnable {
+        @Override
+        public void run() {
+            server.start();
+        }
     }
 }

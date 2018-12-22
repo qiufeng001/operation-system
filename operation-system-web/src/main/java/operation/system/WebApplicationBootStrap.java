@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @ComponentScan(basePackages = {
 								"operation.system.controller",
 								"operation.system.inspect",
+								"operation.system.netty"
 							   })
 public class WebApplicationBootStrap extends ApplicationBootStrap {
 	public static void main(String[] args) {

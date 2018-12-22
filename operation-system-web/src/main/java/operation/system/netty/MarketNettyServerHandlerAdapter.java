@@ -22,8 +22,8 @@ public class MarketNettyServerHandlerAdapter extends ChannelInboundHandlerAdapte
     /**
      * 注入请求分排器
      */
-    @Resource
-    private RequestDispatcher dispatcher;
+ /*   @Resource
+    private RequestDispatcher dispatcher;*/
     private int lossConnectCount = 0;
 
     @Override
@@ -50,7 +50,7 @@ public class MarketNettyServerHandlerAdapter extends ChannelInboundHandlerAdapte
         // 转换为MethodInvokeMeta
         MethodInvokeMeta invokeMeta = (MethodInvokeMeta) msg;
         // 具体的处理类
-        this.dispatcher.dispatcher(channelHandlerContext, invokeMeta);
+        // this.dispatcher.dispatcher(channelHandlerContext, invokeMeta);
     }
 
     /**

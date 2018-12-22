@@ -18,6 +18,7 @@ import io.netty.handler.timeout.IdleStateHandler;
 import operation.system.configuration.NettyServerConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PreDestroy;
@@ -33,7 +34,9 @@ import java.util.concurrent.TimeUnit;
  * @author 叶云轩 contact by tdg_yyx@foxmail.com
  * @date 2018/8/15 - 12:26
  */
+@Component
 public class MarketNettyServer {
+
     /**
      * NettyServerListener 日志控制器
      * Create by 叶云轩 at 2018/3/3 下午12:21
@@ -45,33 +48,45 @@ public class MarketNettyServer {
      * 创建bootstrap
      */
     private ServerBootstrap serverBootstrap = new ServerBootstrap();
+
     /**
      * BOSS
      */
     private EventLoopGroup boss = new NioEventLoopGroup();
+
     /**
      * Worker
      */
     private EventLoopGroup work = new NioEventLoopGroup();
 
+    @Value("${netty.port}")
+    private int port;
+
+    @Value("${netty.max_threads}")
+    private int maxThreads;
+
+    @Value("${netty.max_frame_length}")
+    private int maxFrameLength;
+
     /**
      * 通道适配器
      */
-    @Resource
+   /* @Resource
     private MarketNettyServerHandlerAdapter channelHandlerAdapter;
+*/
 
     /**
      * NETT服务器配置类
      */
-    @Resource
-    private NettyServerConfig nettyConfig;
+ /*   @Resource
+    private NettyServerConfig nettyConfig;*/
 
     /**
      * 开启服务线程
      */
     public void start() {
         // 从配置文件中(application.yml)获取服务端监听端口号
-        int port = nettyConfig.getPort();
+        // int port = nettyConfig.getPort();
         serverBootstrap.group(boss, work)
                 .channel(NioServerSocketChannel.class)
                 .option(ChannelOption.SO_BACKLOG, 100)
@@ -85,12 +100,11 @@ public class MarketNettyServer {
                     // 添加心跳支持
                     pipeline.addLast(new IdleStateHandler(5, 0, 0, TimeUnit.SECONDS));
                     // 基于定长的方式解决粘包/拆包问题
-                    pipeline.addLast(new LengthFieldBasedFrameDecoder(nettyConfig.getMaxFrameLength()
-                            , 0, 2, 0, 2));
+                    pipeline.addLast(new LengthFieldBasedFrameDecoder(maxFrameLength, 0, 2, 0, 2));
                     pipeline.addLast(new LengthFieldPrepender(2));
                     // 序列化
                     pipeline.addLast(new ObjectCodec());
-                    pipeline.addLast(channelHandlerAdapter);
+                    pipeline.addLast(new MarketNettyServerHandler());
                 }
             });
             LOGGER.info("netty服务器在[{}]端口启动监听", port);
